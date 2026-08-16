@@ -1,0 +1,65 @@
+# Catálogo de artefatos, sempre no ar.
+#
+# Regra que rege todas as montagens: os caminhos dentro do container têm de ser
+# IDÊNTICOS aos do host. Os transcripts guardam caminhos absolutos
+# (/tmp/claude-1000/...), e é por eles que o scanner encontra cada arquivo —
+# montar em outro lugar faria todo artefato parecer removido.
+
+services:
+  artefatos:
+    build:
+      context: .
+      args:
+        HOST_HOME: ${HOST_HOME:-/home/nandodev}
+    image: artefatos-cc:latest
+    container_name: artefatos
+    restart: unless-stopped
+
+    # Mesmo uid/gid do host: o banco e as cópias salvas saem com o dono certo.
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+
+    environment:
+      ARTEFATOS_HOST: 0.0.0.0
+      ARTEFATOS_PORT: 7788
+      # arquiva a cada 5 min mesmo sem ninguém com o navegador aberto
+      ARTEFATOS_ARCHIVE_INTERVAL: ${ARTEFATOS_ARCHIVE_INTERVAL:-300000}
+      TZ: ${TZ:-America/Sao_Paulo}
+
+    # Publicado só em localhost, mesmo o processo ouvindo em 0.0.0.0 no container.
+    ports:
+      - "127.0.0.1:${ARTEFATOS_PORT:-7788}:7788"
+
+    volumes:
+      # --- leitura: só o que existe em qualquer instalação ---
+      # Scratchpads das sessões: a fonte volátil que o banco preserva.
+      - ${HOST_SCRATCH:-/tmp/claude-1000}:${HOST_SCRATCH:-/tmp/claude-1000}:ro
+      # Transcripts do perfil padrão — o único caminho garantido numa
+      # instalação limpa do Claude Code.
+      - ${HOST_HOME:-/home/nandodev}/.claude/projects:${HOST_HOME:-/home/nandodev}/.claude/projects:ro
+      #
+      # O resto varia por máquina ($CLAUDE_CONFIG_DIR, perfis do
+      # claude-profiles, ~/.claude/jobs, ~/projects) e vem de
+      # compose.override.yaml, gerado por ./bin/setup.sh a partir do que
+      # realmente existe aqui. Rode o setup antes do primeiro `up`.
+      #
+      # Monta-se só a pasta projects/ de cada raiz, nunca a raiz de um perfil,
+      # que guarda .credentials.json. E atenção: se o caminho de origem não
+      # existir, o Docker o cria como root — por isso o setup confere antes.
+
+      # --- escrita: o que precisa sobreviver ao container ---
+      # caminho do host, não volume nomeado: o CLI `artefatos list` no host
+      # abre exatamente este mesmo arquivo (WAL cuida da concorrência)
+      - ${HOST_HOME:-/home/nandodev}/.local/share/artefatos:${HOST_HOME:-/home/nandodev}/.local/share/artefatos
+      - ${HOST_HOME:-/home/nandodev}/artefatos-salvos:${HOST_HOME:-/home/nandodev}/artefatos-salvos
+
+      # Desenvolvimento: descomente para editar sem rebuildar a imagem.
+      # Depois é só `docker compose restart` em vez de `up -d --build`.
+      # - ./src:/app/src:ro
+      # - ./bin:/app/bin:ro
+      # - ./public:/app/public:ro
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"

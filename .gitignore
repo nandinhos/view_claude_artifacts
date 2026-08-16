@@ -1,0 +1,10 @@
+node_modules/
+*.log
+*.png
+.playwright-mcp/
+
+# gerados por bin/setup.sh — específicos da máquina
+.env
+.env.bak
+compose.override.yaml
+compose.override.yaml.bak

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artefatos do Claude Code</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗂️</text></svg>">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="marca">
+    <span class="marca-icone">🗂️</span>
+    <div>
+      <h1>Artefatos do Claude Code</h1>
+      <p class="resumo" id="resumo">carregando…</p>
+    </div>
+  </div>
+
+  <div class="controles">
+    <label class="busca">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.3-4.3"/></svg>
+      <input type="search" id="busca" placeholder="Buscar por título, descrição ou arquivo…" autocomplete="off" spellcheck="false">
+      <kbd>/</kbd>
+    </label>
+
+    <select id="ordem" aria-label="Ordenação">
+      <option value="createdAt">Mais recentes primeiro</option>
+      <option value="createdAt-asc">Mais antigos primeiro</option>
+      <option value="updatedAt">Atualizados por último</option>
+      <option value="title">Título (A–Z)</option>
+    </select>
+
+    <button id="atualizar" class="btn-icone" title="Reescanear agora">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="layout">
+  <nav class="lateral" id="lateral" aria-label="Projetos"></nav>
+
+  <section class="conteudo">
+    <div class="cabecalho-lista" id="cabecalho-lista"></div>
+    <div class="lista" id="lista"></div>
+  </section>
+</main>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-barra">
+    <span class="modal-titulo" id="modal-titulo"></span>
+    <div class="modal-acoes">
+      <a id="modal-nova-aba" class="btn" target="_blank" rel="noopener">Abrir em nova aba</a>
+      <button class="btn btn-fantasma" id="modal-fechar">Fechar <kbd>esc</kbd></button>
+    </div>
+  </div>
+  <!-- Sem sandbox de propósito: o artefato é HTML local do próprio usuário e
+       precisa de scripts + localStorage para renderizar como foi publicado. -->
+  <iframe id="modal-frame" title="Pré-visualização do artefato"></iframe>
+</div>
+
+<div class="aviso" id="aviso" hidden></div>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>

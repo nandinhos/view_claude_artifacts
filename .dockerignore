@@ -1,0 +1,11 @@
+.git
+.gitignore
+node_modules
+*.log
+*.png
+.playwright-mcp
+README.md
+compose.yaml
+Dockerfile
+.dockerignore
+.env

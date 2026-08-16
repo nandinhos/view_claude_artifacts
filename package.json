@@ -1,0 +1,19 @@
+{
+  "name": "artefatos-cc",
+  "version": "1.0.0",
+  "description": "Catálogo local dos artefatos gerados pelo Claude Code, agrupados por projeto e ordenados por data",
+  "type": "module",
+  "bin": {
+    "artefatos": "bin/artefatos"
+  },
+  "scripts": {
+    "start": "node bin/artefatos.js",
+    "scan": "./bin/artefatos scan",
+    "list": "./bin/artefatos list",
+    "setup": "./bin/setup.sh"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "private": true
+}

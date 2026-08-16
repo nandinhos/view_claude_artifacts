@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# Ponto de entrada do CLI.
+#
+# Existe por um motivo só: node:sqlite emite um ExperimentalWarning a cada
+# boot do processo, e esse aviso vem do interior do Node — não passa por
+# process.emitWarning, então não dá para silenciá-lo de dentro do código.
+# A flag na linha de comando é o único jeito, e ela precisa estar aqui para
+# valer também quando o CLI é chamado por um slash command ou por script.
+
+exec node --disable-warning=ExperimentalWarning \
+  "$(dirname "$(readlink -f "$0")")/artefatos.js" "$@"
