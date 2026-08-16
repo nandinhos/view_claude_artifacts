@@ -47,7 +47,7 @@ O `.env` que o setup escreve — dá para editar à mão, o script preserva port
 intervalo e TZ nas próximas execuções:
 
 ```
-HOST_HOME=/home/nandodev
+HOST_HOME=/home/<seu-usuario>
 HOST_UID=1000
 HOST_GID=1000
 HOST_SCRATCH=/tmp/claude-1000

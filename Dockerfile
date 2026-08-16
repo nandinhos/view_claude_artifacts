@@ -20,7 +20,7 @@ COPY public/ ./public/
 
 # O HOME precisa bater com o do host: os caminhos gravados nos transcripts são
 # absolutos, e é por eles que o scanner acha os arquivos montados.
-ARG HOST_HOME=/home/nandodev
+ARG HOST_HOME=/home/user
 ENV HOME=${HOST_HOME}
 
 EXPOSE 7788
